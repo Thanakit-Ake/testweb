@@ -6,31 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body onload="loadDoc()">
+<body> <!-- onload="loadDoc()" -->
+
 <div id="out"></div>
         <script>
-        function loadDoc(){
+        function loadContent(){
            let xhttp = new XMLHttpRequest();
            xhttp.onreadystatechange = function(){
                console.log(this.readyState);
                if(this.readyState==4 && this.status == 200){
                    console.log(this.responseText);
-                   my = JSON.parse(this.responseText);
-                   m = document.getElementById("out");
-                   text = "<table border='1'>";
-                  for(i = 0; i<my.length;i++){
-                        text += "<tr>";
-                        for(key in my[i]){
-                            text += "<td>"+my[i][key]+"</td>";
-                        }
-                        text += "</tr>";
-                  }
-                  alert(text);
-                  m.innerHTML +=text;
+                   data = JSON.parse(this.responseText);
+                   console.log =(this.length);
+                create_table(data);
                }
            } 
         xhttp.open("GET","02 rest.php",true);
         xhttp.send();
+        }
+        function create_table(data){
+            out = document.getElementById("out");
+            out.innerHTML ="";
+            text = "<table border='1'>";
+            for(i=0;i<data.length;i++){
+                for(inf in data[i]){
+                    text += "<td>"+data[i][inf]+"</td>";
+                }
+                text = "<tr>"+text+"</tr>";
+            }
+            out.innerHTML = text+"</table>";
         }
          </script>
 </body>

@@ -1,30 +1,44 @@
 <?php
     class db{
         private $db;
-        private $debug_mode;
-        public function __construct($user,$pass,$db,$debug){
-            $this->debug_mod = $debug;
-            $this->db = new mysqli("localhost",$user,$pass,$db);
+        private $debug;
+        function __construct($user,$pass,$dbname,$debug){
+            $this->debug = $debug;
+            $this->db = new mysqli("localhost",$user,$pass,$dbname);
             $this->db->set_charset("utf8");
             if($this->db->connect_errno){
-                echo "Database connect fail {$this->db->connect_errno}";
+                echo "Failed to Connect to MySQL : ". 
+                    $this->db->connect_errno;
                 exit();
             }else{
-                $this->text_debug("database Connect success");
+                $this->debug_text("Conect Sucess......");
             }
         }
-        public function query($sql){
-               $result = $this->db->query($sql);
-               $data = $result->fetch_all(MYSQLI_ASSOC);
-               if($this->debug_mode==true) print_r($data);
-               return $data; 
+        //query
+        function sel_data($sql){
+            $result = $this->db->query($sql);
+            $this->debug_text($sql);
+            $data = $result->fetch_all(MYSQLI_ASSOC);
+            if($this->debug){
+                echo "<pre>";
+                echo print_r($data);
+                echo "</pre>";
+           
+            }
+            return $data;
         }
-        public function close(){
+         function query($sql){
+             $result = $this->db->query($sql);
+               return $result; 
+        }
+        function debug_text($text){
+            if($this->debug){
+                echo"Debug :{$text}<br>";
+            }  
+        }
+         function close(){
             $this->db->close();
-        }
-        private function text_debug($text){
-            if($this->debug_mode==true) echo $text;      
-        }
+        }      
     }
         // $my_db = new db("Thanakit","YjrXlOiawfhOxGOK","book",true);
         // $my_db->query("select * from user");
